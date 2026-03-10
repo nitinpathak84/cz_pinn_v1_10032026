@@ -7,9 +7,10 @@ defaults:
   - loss: sum
   - batch_size: cz_v1
   - custom: cz_v1
+  - _self_
 
 jit: true
-save_filetypes: ["vtk", "np"]
+save_filetypes: "vtk"
 debug: false
 
 training:
