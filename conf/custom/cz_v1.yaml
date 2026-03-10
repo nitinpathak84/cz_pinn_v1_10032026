@@ -38,3 +38,7 @@ inference:
   n_crucible: 12000
   n_insulation: 20000
   batch_size: 4096
+
+dimensional:
+  T_seed_K: 1500.0
+  T_hot_K: 1850.0
