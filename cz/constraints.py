@@ -280,7 +280,7 @@ def add_inferencers(domain, inferencer_nodes, geo, cfg):
         PointwiseInferencer(
             nodes=inferencer_nodes["crystal"],
             invar=invar_cr,
-            output_names=["temperature_K", "theta", "region_id"],
+            output_names=["temperature_K", "theta"],
             batch_size=bs,
         ),
         "crystal",
@@ -290,7 +290,7 @@ def add_inferencers(domain, inferencer_nodes, geo, cfg):
         PointwiseInferencer(
             nodes=inferencer_nodes["melt"],
             invar=invar_m,
-            output_names=["temperature_K", "theta", "region_id"],
+            output_names=["temperature_K", "theta"],
             batch_size=bs,
         ),
         "melt",
@@ -300,7 +300,7 @@ def add_inferencers(domain, inferencer_nodes, geo, cfg):
         PointwiseInferencer(
             nodes=inferencer_nodes["crucible"],
             invar=invar_cu,
-            output_names=["temperature_K", "theta", "region_id"],
+            output_names=["temperature_K", "theta"],
             batch_size=bs,
         ),
         "crucible",
@@ -310,7 +310,7 @@ def add_inferencers(domain, inferencer_nodes, geo, cfg):
         PointwiseInferencer(
             nodes=inferencer_nodes["insulation"],
             invar=invar_ins,
-            output_names=["temperature_K", "theta", "region_id"],
+            output_names=["temperature_K", "theta"],
             batch_size=bs,
         ),
         "insulation",
