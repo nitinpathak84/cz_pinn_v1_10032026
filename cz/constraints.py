@@ -262,7 +262,7 @@ def add_interface_constraints(domain, nodes, geo, cfg):
 from physicsnemo.sym.domain.inferencer import PointwiseInferencer
 
 
-def add_inferencers(domain, nodes, geo, cfg):
+def add_inferencers(domain, inferencer_nodes, geo, cfg):
     inf = cfg.custom.inference
 
     n_cr = int(inf.n_crystal)
@@ -271,43 +271,50 @@ def add_inferencers(domain, nodes, geo, cfg):
     n_ins = int(inf.n_insulation)
     bs = int(inf.batch_size)
 
-    # Sample only inside each physical region
     invar_cr = geo.crystal.sample_interior(nr_points=n_cr)
     invar_m = geo.melt.sample_interior(nr_points=n_m)
     invar_cu = geo.crucible.sample_interior(nr_points=n_cu)
     invar_ins = geo.insulation.sample_interior(nr_points=n_ins)
 
-    inferencer_cr = PointwiseInferencer(
-        nodes=nodes,
-        invar=invar_cr,
-        output_names=["theta_cr"],
-        batch_size=bs,
+    domain.add_inferencer(
+        PointwiseInferencer(
+            nodes=inferencer_nodes["crystal"],
+            invar=invar_cr,
+            output_names=["temperature_K", "theta", "region_id"],
+            batch_size=bs,
+        ),
+        "crystal",
     )
-    domain.add_inferencer(inferencer_cr, "crystal")
 
-    inferencer_m = PointwiseInferencer(
-        nodes=nodes,
-        invar=invar_m,
-        output_names=["theta_m"],
-        batch_size=bs,
+    domain.add_inferencer(
+        PointwiseInferencer(
+            nodes=inferencer_nodes["melt"],
+            invar=invar_m,
+            output_names=["temperature_K", "theta", "region_id"],
+            batch_size=bs,
+        ),
+        "melt",
     )
-    domain.add_inferencer(inferencer_m, "melt")
 
-    inferencer_cu = PointwiseInferencer(
-        nodes=nodes,
-        invar=invar_cu,
-        output_names=["theta_cu"],
-        batch_size=bs,
+    domain.add_inferencer(
+        PointwiseInferencer(
+            nodes=inferencer_nodes["crucible"],
+            invar=invar_cu,
+            output_names=["temperature_K", "theta", "region_id"],
+            batch_size=bs,
+        ),
+        "crucible",
     )
-    domain.add_inferencer(inferencer_cu, "crucible")
 
-    inferencer_ins = PointwiseInferencer(
-        nodes=nodes,
-        invar=invar_ins,
-        output_names=["theta_ins"],
-        batch_size=bs,
+    domain.add_inferencer(
+        PointwiseInferencer(
+            nodes=inferencer_nodes["insulation"],
+            invar=invar_ins,
+            output_names=["temperature_K", "theta", "region_id"],
+            batch_size=bs,
+        ),
+        "insulation",
     )
-    domain.add_inferencer(inferencer_ins, "insulation")
 
 
 def add_monitors(domain, nodes, geo, cfg):
