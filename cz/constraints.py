@@ -259,25 +259,55 @@ def add_interface_constraints(domain, nodes, geo, cfg):
     )
 
 
+from physicsnemo.sym.domain.inferencer import PointwiseInferencer
+
+
 def add_inferencers(domain, nodes, geo, cfg):
     inf = cfg.custom.inference
 
-    grid_invar = make_regular_grid(
-        xmin=0.0,
-        xmax=geo.r_outer,
-        ymin=-geo.t_crucible_bottom,
-        ymax=geo.h_outer,
-        nx=int(inf.nx),
-        ny=int(inf.ny),
-    )
+    n_cr = int(inf.n_crystal)
+    n_m = int(inf.n_melt)
+    n_cu = int(inf.n_crucible)
+    n_ins = int(inf.n_insulation)
+    bs = int(inf.batch_size)
 
-    inferencer = PointwiseInferencer(
+    # Sample only inside each physical region
+    invar_cr = geo.crystal.sample_interior(nr_points=n_cr)
+    invar_m = geo.melt.sample_interior(nr_points=n_m)
+    invar_cu = geo.crucible.sample_interior(nr_points=n_cu)
+    invar_ins = geo.insulation.sample_interior(nr_points=n_ins)
+
+    inferencer_cr = PointwiseInferencer(
         nodes=nodes,
-        invar=grid_invar,
-        output_names=["theta_cr", "theta_m", "theta_cu", "theta_ins"],
-        batch_size=int(inf.batch_size),
+        invar=invar_cr,
+        output_names=["theta_cr"],
+        batch_size=bs,
     )
-    domain.add_inferencer(inferencer, "global_grid")
+    domain.add_inferencer(inferencer_cr, "crystal")
+
+    inferencer_m = PointwiseInferencer(
+        nodes=nodes,
+        invar=invar_m,
+        output_names=["theta_m"],
+        batch_size=bs,
+    )
+    domain.add_inferencer(inferencer_m, "melt")
+
+    inferencer_cu = PointwiseInferencer(
+        nodes=nodes,
+        invar=invar_cu,
+        output_names=["theta_cu"],
+        batch_size=bs,
+    )
+    domain.add_inferencer(inferencer_cu, "crucible")
+
+    inferencer_ins = PointwiseInferencer(
+        nodes=nodes,
+        invar=invar_ins,
+        output_names=["theta_ins"],
+        batch_size=bs,
+    )
+    domain.add_inferencer(inferencer_ins, "insulation")
 
 
 def add_monitors(domain, nodes, geo, cfg):
