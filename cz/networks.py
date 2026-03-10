@@ -109,30 +109,26 @@ def build_cz_model(cfg):
     theta_cu = Symbol("theta_cu")
     theta_ins = Symbol("theta_ins")
 
-    inferencer_nodes = {
+        inferencer_nodes = {
         "crystal": [
             net_cr.make_node(name="theta_cr_net_infer"),
             Node.from_sympy(T_seed_K + dT * theta_cr, "temperature_K"),
             Node.from_sympy(theta_cr, "theta"),
-            Node.from_sympy(0.0 * theta_cr + Number(1.0), "region_id"),
         ],
         "melt": [
             net_m.make_node(name="theta_m_net_infer"),
             Node.from_sympy(T_seed_K + dT * theta_m, "temperature_K"),
             Node.from_sympy(theta_m, "theta"),
-            Node.from_sympy(0.0 * theta_m + Number(2.0), "region_id"),
         ],
         "crucible": [
             net_cu.make_node(name="theta_cu_net_infer"),
             Node.from_sympy(T_seed_K + dT * theta_cu, "temperature_K"),
             Node.from_sympy(theta_cu, "theta"),
-            Node.from_sympy(0.0 * theta_cu + Number(3.0), "region_id"),
         ],
         "insulation": [
             net_ins.make_node(name="theta_ins_net_infer"),
             Node.from_sympy(T_seed_K + dT * theta_ins, "temperature_K"),
             Node.from_sympy(theta_ins, "theta"),
-            Node.from_sympy(0.0 * theta_ins + Number(4.0), "region_id"),
         ],
     }
 
