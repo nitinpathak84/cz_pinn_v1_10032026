@@ -1,0 +1,38 @@
+geometry:
+  # All values are already normalized / nondimensional
+  crystal_radius: 0.35
+  crystal_height: 0.22
+
+  melt_radius: 0.45
+  melt_height: 0.18
+
+  crucible_wall: 0.05
+  crucible_bottom: 0.05
+
+  outer_radius: 0.95
+  outer_height: 0.85
+
+physics:
+  # Only interface continuity uses these in V1
+  k_m: 0.35
+  k_cu: 0.12
+  k_ins: 0.02
+
+boundary:
+  theta_seed: 0.0
+  theta_hot: 1.0
+  theta_melt: 0.62
+
+numerics:
+  eps_r: 1.0e-4
+
+nondim:
+  # If you use x = r / R_ref and y = z / Z_ref,
+  # then the steady axisymmetric PDE becomes:
+  # T_xx + (1/x) T_x + (R_ref/Z_ref)^2 T_yy = 0
+  aspect_sq: 1.0
+
+inference:
+  nx: 241
+  ny: 301
+  batch_size: 4096
